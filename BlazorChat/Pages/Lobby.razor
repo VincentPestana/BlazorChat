@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+
+<br />
+<h3>Chat Lobby</h3>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm">
+			<h3>Create new chat room</h3>
+			<input @bind="_createName" />
+			<br />
+			<input type="button" value="Create Room" @onclick="CreateRoom" />
+		</div>
+		<div class="col-sm">
+			<h3>Join Room</h3>
+			<input @bind="_joinRoomName" />
+			<br />
+			<input type="button" value="Join Room" @onclick="JoinRoom" />
+		</div>
+	</div>
+</div>
+
+@code {
+	private string _createName;
+
+	private string _joinRoomName;
+
+	private HubConnection _hubConnection;
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Dont connect SR on page load, instead only when an action runs
+	}
+
+	private void CreateRoom()
+	{
+		// Connect to SR hub
+
+		// Call create method with status updates to a message, so the user can see whats happening
+	}
+
+	private void JoinRoom()
+	{
+
+	}
+}
