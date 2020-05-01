@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
 
+@inject NavigationManager NavigationManager
+
 <br />
 <h3>Chat Lobby</h3>
 
@@ -41,6 +43,12 @@
 
 	private void JoinRoom()
 	{
+		// TODO: Name room must be over 8 characters
 
+		
+
+
+		// Redirect to Room
+		NavigationManager.NavigateTo($"/Room/{_joinRoomName}/null");
 	}
 }
