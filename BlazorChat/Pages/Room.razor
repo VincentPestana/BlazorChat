@@ -16,10 +16,15 @@
 		</div>
 	</div>
 </div>
-
-<div class="container" id="pnlChat">
-
-</div>
+@if(_roomJoined)
+{
+	<div class="container" id="pnlChat">
+		<div class="row">
+			
+		</div>
+		ROOM JOINED
+	</div>
+}
 
 @code {
 	[Parameter]
@@ -28,6 +33,8 @@
 	public string _username { get; set; }
 
 	private HubConnection _hubConnection;
+
+	private bool _roomJoined;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -40,9 +47,14 @@
 		_hubConnection.On<string>("RoomJoined", (roomName) =>
 		{
 			// Room has been joined
+
+			_roomJoined = true;
+			StateHasChanged();
 		});
 
 		await _hubConnection.StartAsync();
+
+		await JoinRoom();
 	}
 
 	private async Task JoinRoom()

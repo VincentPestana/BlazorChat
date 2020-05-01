@@ -23,7 +23,11 @@ namespace BlazorChat.Hubs
 			if (RoomExists(roomName))
 				return;
 
-			_roomManager.Rooms.Add(roomName, new ChatRoom { CreatedByUser = createdByUser });
+			// Create new room
+			_roomManager.Rooms.Add(roomName, new ChatRoom {
+				CreatedByUser = createdByUser,
+				ConnectionIds = new List<string>{ Context.ConnectionId }
+			});
 
 			await Clients.Caller.SendAsync("RoomCreated", roomName);
 		}
