@@ -7,6 +7,12 @@
 
 <div class="container">
 	<div class="row">
+		<div class="col-sm-4 offset-4">
+			<h2>Username</h2>
+			<input @bind="_username" />
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-sm">
 			<h3>Create new chat room</h3>
 			<input @bind="_createName" />
@@ -23,8 +29,9 @@
 </div>
 
 @code {
-	private string _createName;
 
+	private string _username;
+	private string _createName;
 	private string _joinRoomName;
 
 	private HubConnection _hubConnection;
@@ -34,21 +41,29 @@
 		// Dont connect SR on page load, instead only when an action runs
 	}
 
-	private void CreateRoom()
+	private async Task CreateRoom()
 	{
 		// Connect to SR hub
+		_hubConnection = new HubConnectionBuilder()
+			.WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
+			.Build();
 
-		// Call create method with status updates to a message, so the user can see whats happening
+		// RoomCreated
+		_hubConnection.On<string>("RoomCreated", (roomName) =>
+		{
+			NavigationManager.NavigateTo($"/Room/{_joinRoomName}/{_username}");
+		});
+
+		await _hubConnection.StartAsync();
+
+		await _hubConnection.SendAsync("CreateRoom", _createName, _username);
 	}
 
 	private void JoinRoom()
 	{
 		// TODO: Name room must be over 8 characters
 
-		
-
-
 		// Redirect to Room
-		NavigationManager.NavigateTo($"/Room/{_joinRoomName}");
+		NavigationManager.NavigateTo($"/Room/{_joinRoomName}/{_username}");
 	}
 }

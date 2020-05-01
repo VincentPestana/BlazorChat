@@ -16,15 +16,15 @@ namespace BlazorChat.Hubs
 			
 		}
 
-		public async Task<string> CreateRoom(string roomName, string createdByUser)
+		public async Task CreateRoom(string roomName, string createdByUser)
 		{
 			// Check if name exists
 			if (RoomExists(roomName))
-				return "Room name exists";
+				return;
 
 			_rooms.Add(roomName, new ChatRoom { CreatedByUser = createdByUser });
 
-			return "";
+			await Clients.Caller.SendAsync("RoomCreated", roomName);
 		}
 
 		public async Task JoinRoom(string roomName)
@@ -48,19 +48,22 @@ namespace BlazorChat.Hubs
 
 		//}
 
-		public async Task<string> SendMessage(string roomName, string message)
+		public async Task SendMessage(string roomName, string message)
 		{
 			ChatRoom room = null;
 			if (!_rooms.TryGetValue(roomName, out room))
-				return "Room does not exist";
+				return;
 
 			await Clients.Clients(room.ConnectionIds).SendAsync("ReceiveMessage", message);
 
-			return "";
+			return;
 		}
 
 		private bool RoomExists(string roomName)
 		{
+			if (_rooms == null)
+				return false;
+
 			return _rooms.ContainsKey(roomName);
 		}
 	}

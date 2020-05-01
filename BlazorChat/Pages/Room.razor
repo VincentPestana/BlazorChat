@@ -2,7 +2,7 @@
 
 @inject NavigationManager NavigationManager
 
-@page "/Room/{_roomName}"
+@page "/Room/{_roomName}/{_username}"
 
 <h3>Room</h3>
 
@@ -24,6 +24,8 @@
 @code {
 	[Parameter]
 	public string _roomName { get; set; }
+	[Parameter]
+	public string _username { get; set; }
 
 	private HubConnection _hubConnection;
 
