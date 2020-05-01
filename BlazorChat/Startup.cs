@@ -32,6 +32,7 @@ namespace BlazorChat
 			services.AddRazorPages();
 			services.AddServerSideBlazor();
 			services.AddSingleton<WeatherForecastService>();
+			services.AddSingleton<RoomManager>();
 			services.AddResponseCompression(opts =>
 			{
 				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(

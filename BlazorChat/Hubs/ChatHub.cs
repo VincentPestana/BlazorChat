@@ -9,11 +9,12 @@ namespace BlazorChat.Hubs
 {
 	public class ChatHub : Hub
 	{
-		private Dictionary<string, ChatRoom> _rooms;
+		private RoomManager _roomManager;
+		//private Dictionary<string, ChatRoom> _rooms;
 
-		public ChatHub()
+		public ChatHub(RoomManager roomManager)
 		{
-			
+			_roomManager = roomManager;
 		}
 
 		public async Task CreateRoom(string roomName, string createdByUser)
@@ -22,7 +23,7 @@ namespace BlazorChat.Hubs
 			if (RoomExists(roomName))
 				return;
 
-			_rooms.Add(roomName, new ChatRoom { CreatedByUser = createdByUser });
+			_roomManager.Rooms.Add(roomName, new ChatRoom { CreatedByUser = createdByUser });
 
 			await Clients.Caller.SendAsync("RoomCreated", roomName);
 		}
@@ -31,12 +32,12 @@ namespace BlazorChat.Hubs
 		{
 			// Check if name exists
 			ChatRoom room = null;
-			if (!_rooms.TryGetValue(roomName, out room))
+			if (!_roomManager.Rooms.TryGetValue(roomName, out room))
 				return;
 
 			room.ConnectionIds.Add(Context.ConnectionId);
 
-			_rooms[roomName] = room;
+			_roomManager.Rooms[roomName] = room;
 
 			await Clients.Caller.SendAsync("RoomJoined", roomName);
 
@@ -51,7 +52,7 @@ namespace BlazorChat.Hubs
 		public async Task SendMessage(string roomName, string message)
 		{
 			ChatRoom room = null;
-			if (!_rooms.TryGetValue(roomName, out room))
+			if (!_roomManager.Rooms.TryGetValue(roomName, out room))
 				return;
 
 			await Clients.Clients(room.ConnectionIds).SendAsync("ReceiveMessage", message);
@@ -61,10 +62,7 @@ namespace BlazorChat.Hubs
 
 		private bool RoomExists(string roomName)
 		{
-			if (_rooms == null)
-				return false;
-
-			return _rooms.ContainsKey(roomName);
+			return _roomManager.Rooms.ContainsKey(roomName);
 		}
 	}
 }

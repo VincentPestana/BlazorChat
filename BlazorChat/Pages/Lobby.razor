@@ -51,7 +51,7 @@
 		// RoomCreated
 		_hubConnection.On<string>("RoomCreated", (roomName) =>
 		{
-			NavigationManager.NavigateTo($"/Room/{_joinRoomName}/{_username}");
+			NavigationManager.NavigateTo($"/Room/{roomName}/{_username}");
 		});
 
 		await _hubConnection.StartAsync();
