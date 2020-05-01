@@ -39,7 +39,9 @@ namespace BlazorChat.Hubs
 			if (!_roomManager.Rooms.TryGetValue(roomName, out room))
 				return;
 
-			room.ConnectionIds.Add(Context.ConnectionId);
+			// Check if client is already connected
+			if (!room.ConnectionIds.Contains(Context.ConnectionId))
+				room.ConnectionIds.Add(Context.ConnectionId);
 
 			_roomManager.Rooms[roomName] = room;
 
