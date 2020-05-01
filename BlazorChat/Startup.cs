@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorChat.Data;
+using Microsoft.AspNetCore.ResponseCompression;
+using BlazorChat.Hubs;
 
 namespace BlazorChat
 {
@@ -26,9 +28,15 @@ namespace BlazorChat
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddSignalR();
 			services.AddRazorPages();
 			services.AddServerSideBlazor();
 			services.AddSingleton<WeatherForecastService>();
+			services.AddResponseCompression(opts =>
+			{
+				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+					new[] { "application/octet-stream" });
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +61,7 @@ namespace BlazorChat
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapBlazorHub();
+				endpoints.MapHub<ChatHub>("/chatHub");
 				endpoints.MapFallbackToPage("/_Host");
 			});
 		}

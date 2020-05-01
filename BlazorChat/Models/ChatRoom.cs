@@ -8,5 +8,6 @@ namespace BlazorChat.Models
 	public class ChatRoom
 	{
 		public string CreatedByUser { get; set; }
+		public List<string> ConnectionIds { get; set; }
 	}
 }

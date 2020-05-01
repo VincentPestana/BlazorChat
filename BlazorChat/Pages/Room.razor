@@ -34,14 +34,19 @@
 			.WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
 			.Build();
 
+		// Joining a room successful
+		_hubConnection.On<string>("RoomJoined", (roomName) =>
+		{
+			// Room has been joined
+		});
+
 		await _hubConnection.StartAsync();
 	}
 
-	private void JoinRoom()
+	private async Task JoinRoom()
 	{
 		// Join the room
-
-		// Switch which panel is visible
+		await _hubConnection.SendAsync("JoinRoom", _roomName);
 	}
 
 }
