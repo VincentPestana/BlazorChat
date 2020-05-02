@@ -6,25 +6,46 @@
 
 <h3>Room</h3>
 
-<div class="container" id="pnlJoin">
-	<div class="row">
-		<div class="col-sm">
-			<h3>Join Room</h3>
-			<input @bind="_roomName" />
-			<br />
-			<input type="button" value="Join Room" @onclick="JoinRoom" />
-		</div>
-	</div>
-</div>
-@if(_roomJoined)
+@if (_roomJoined)
 {
 	<div class="container" id="pnlChat">
 		<div class="row">
-			
+
 		</div>
 		ROOM JOINED
 	</div>
 }
+else // Join a Chat Room
+{
+	<div class="container" id="pnlJoin">
+		<div class="row">
+			<div class="col-sm">
+				<h3>Join Room</h3>
+				<input @bind="_roomName" />
+				<br />
+				<input type="button" value="Join Room" @onclick="JoinRoom" />
+			</div>
+		</div>
+	</div>
+}
+
+
+<div class="container" id="pnlChat">
+	<div class="row">
+		<div class="col-sm">
+			ROOM JOINED
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-11">
+			<input class="form-control-plaintext" @bind="_message" />
+		</div>
+		<div class="col-sm-1">
+			<input type="button" class="btn-primary" value="Send" @onclick="SendMessage" />
+		</div>
+	</div>
+</div>
+
 
 @code {
 	[Parameter]
@@ -35,6 +56,8 @@
 	private HubConnection _hubConnection;
 
 	private bool _roomJoined;
+
+	private string _message;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -61,6 +84,13 @@
 	{
 		// Join the room
 		await _hubConnection.SendAsync("JoinRoom", _roomName);
+	}
+
+	private async Task SendMessage()
+	{
+		// Dont send blank messages
+		if (string.IsNullOrEmpty(_message))
+			return;
 	}
 
 }
