@@ -4,15 +4,29 @@
 
 @page "/Room/{_roomName}/{_username}"
 
-<h3>Room</h3>
-
 @if (_roomJoined)
 {
+	<h3>Room joined</h3>
 	<div class="container" id="pnlChat">
 		<div class="row">
-
+			<div class="col-sm">
+				<div class="input-group">
+					<input class="form-control" placeholder="Type your message here" @bind="_message" />
+					<div class="input-group-append">
+						<button class="btn btn-outline-dark" type="button" @onclick="SendMessage">Send</button>
+					</div>
+				</div>
+			</div>
 		</div>
-		ROOM JOINED
+		<div class="row">
+			<div class="col-sm">
+				<ul>
+					<li>
+						<b>admin: </b>Message goes here
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 }
 else // Join a Chat Room
@@ -28,23 +42,6 @@ else // Join a Chat Room
 		</div>
 	</div>
 }
-
-
-<div class="container" id="pnlChat">
-	<div class="row">
-		<div class="col-sm">
-			ROOM JOINED
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-11">
-			<input class="form-control-plaintext" @bind="_message" />
-		</div>
-		<div class="col-sm-1">
-			<input type="button" class="btn-primary" value="Send" @onclick="SendMessage" />
-		</div>
-	</div>
-</div>
 
 
 @code {
@@ -69,15 +66,15 @@ else // Join a Chat Room
 		// Joining a room successful
 		_hubConnection.On<string>("RoomJoined", (roomName) =>
 		{
-			// Room has been joined
+		// Room has been joined
 
-			_roomJoined = true;
+		_roomJoined = true;
 			StateHasChanged();
 		});
 
-		_hubConnection.On<string, string>("ReceiveMessage", (uername, message) =>
+		_hubConnection.On<string, string>("ReceiveMessage", async (username, message) =>
 		{
-			// TODO
+			await ReceiveMessage(username, message);
 		});
 
 		await _hubConnection.StartAsync();
@@ -102,9 +99,9 @@ else // Join a Chat Room
 		// TODo Clear message
 	}
 
-	private async Task ReceiveMessage()
+	private async Task ReceiveMessage(string username, string message)
 	{
-
+		// Add message to list
 	}
 
 }
