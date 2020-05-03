@@ -55,13 +55,15 @@ namespace BlazorChat.Hubs
 
 		//}
 
-		public async Task SendMessage(string roomName, string message)
+		public async Task SendMessage(string roomName, string username, string message)
 		{
 			ChatRoom room = null;
 			if (!_roomManager.Rooms.TryGetValue(roomName, out room))
 				return;
 
-			await Clients.Clients(room.ConnectionIds).SendAsync("ReceiveMessage", message);
+			var clientsToSend = room.ConnectionIds;
+			clientsToSend.Remove(Context.ConnectionId);
+			await Clients.Clients(clientsToSend).SendAsync("ReceiveMessage", username, message);
 
 			return;
 		}

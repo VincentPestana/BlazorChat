@@ -75,6 +75,11 @@ else // Join a Chat Room
 			StateHasChanged();
 		});
 
+		_hubConnection.On<string, string>("ReceiveMessage", (uername, message) =>
+		{
+			// TODO
+		});
+
 		await _hubConnection.StartAsync();
 
 		await JoinRoom();
@@ -91,6 +96,15 @@ else // Join a Chat Room
 		// Dont send blank messages
 		if (string.IsNullOrEmpty(_message))
 			return;
+
+		await _hubConnection.SendAsync("SendMessage", _roomName, _username, _message);
+
+		// TODo Clear message
+	}
+
+	private async Task ReceiveMessage()
+	{
+
 	}
 
 }
