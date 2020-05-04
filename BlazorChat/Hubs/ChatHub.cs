@@ -62,7 +62,8 @@ namespace BlazorChat.Hubs
 				return;
 
 			var clientsToSend = room.ConnectionIds;
-			clientsToSend.Remove(Context.ConnectionId);
+			// Remove the user who sent the message
+			//clientsToSend.Remove(Context.ConnectionId);
 			await Clients.Clients(clientsToSend).SendAsync("ReceiveMessage", username, message);
 
 			return;

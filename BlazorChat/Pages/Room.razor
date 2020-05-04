@@ -21,9 +21,12 @@
 		<div class="row">
 			<div class="col-sm">
 				<ul>
-					<li>
-						<b>admin: </b>Message goes here
-					</li>
+					@foreach (var chat in _roomMessages)
+					{
+						<li>
+							@chat
+						</li>
+					}
 				</ul>
 			</div>
 		</div>
@@ -56,6 +59,8 @@ else // Join a Chat Room
 
 	private string _message;
 
+	private List<string> _roomMessages = new List<string> { };
+
 	protected override async Task OnInitializedAsync()
 	{
 		// Check if room exists
@@ -66,9 +71,9 @@ else // Join a Chat Room
 		// Joining a room successful
 		_hubConnection.On<string>("RoomJoined", (roomName) =>
 		{
-		// Room has been joined
+			// Room has been joined
 
-		_roomJoined = true;
+			_roomJoined = true;
 			StateHasChanged();
 		});
 
@@ -101,7 +106,8 @@ else // Join a Chat Room
 
 	private async Task ReceiveMessage(string username, string message)
 	{
-		// Add message to list
+		_roomMessages.Add($"<b>{username}: </b>{message}");
+		StateHasChanged();
 	}
 
 }
