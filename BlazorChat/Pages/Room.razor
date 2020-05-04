@@ -24,8 +24,8 @@
 				<ul>
 					@foreach (var chat in _roomMessages)
 					{
-						<li>
-							<b>@chat.Username: </b>
+						<li class="list-group-flush">
+							<b>@chat.Username</b><br />
 							@chat.Text<br />
 							<small>@chat.DateSent</small>
 						</li>
@@ -100,6 +100,8 @@ else // Join a Chat Room
 		// Dont send blank messages
 		if (string.IsNullOrEmpty(_message))
 			return;
+
+		_roomMessages.Add(new ChatMessage { Username = _username, Text = _message, DateSent = DateTime.Now });
 
 		await _hubConnection.SendAsync("SendMessage", _roomName, _username, _message);
 
