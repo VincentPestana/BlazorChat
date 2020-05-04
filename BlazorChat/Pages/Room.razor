@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
+@using Models
 
 @inject NavigationManager NavigationManager
 
@@ -24,7 +25,9 @@
 					@foreach (var chat in _roomMessages)
 					{
 						<li>
-							@chat
+							<b>@chat.Username: </b>
+							@chat.Text<br />
+							<small>@chat.DateSent</small>
 						</li>
 					}
 				</ul>
@@ -59,7 +62,7 @@ else // Join a Chat Room
 
 	private string _message;
 
-	private List<string> _roomMessages = new List<string> { };
+	private List<ChatMessage> _roomMessages = new List<ChatMessage>();
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -72,7 +75,6 @@ else // Join a Chat Room
 		_hubConnection.On<string>("RoomJoined", (roomName) =>
 		{
 			// Room has been joined
-
 			_roomJoined = true;
 			StateHasChanged();
 		});
@@ -101,13 +103,16 @@ else // Join a Chat Room
 
 		await _hubConnection.SendAsync("SendMessage", _roomName, _username, _message);
 
-		// TODo Clear message
+		// Clear message input
+		_message = "";
+		StateHasChanged();
 	}
 
 	private async Task ReceiveMessage(string username, string message)
 	{
-		_roomMessages.Add($"<b>{username}: </b>{message}");
+		_roomMessages.Add(new ChatMessage { Username = username, DateSent = DateTime.Now,  Text = message});
 		StateHasChanged();
+		return;
 	}
 
 }
