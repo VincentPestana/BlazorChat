@@ -21,13 +21,13 @@
 		</div>
 		<div class="row">
 			<div class="col-sm">
-				<ul>
+				<ul class="list-group">
 					@foreach (var chat in _roomMessages)
 					{
-						<li class="list-group-flush">
+						<li class="list-group-item @(_username == chat.Username ? "active" : "")">
 							<b>@chat.Username</b><br />
 							@chat.Text<br />
-							<small>@chat.DateSent</small>
+							<h6>@chat.DateSent</h6>
 						</li>
 					}
 				</ul>
