@@ -101,8 +101,6 @@ else // Join a Chat Room
 		if (string.IsNullOrEmpty(_message))
 			return;
 
-		_roomMessages.Add(new ChatMessage { Username = _username, Text = _message, DateSent = DateTime.Now });
-
 		await _hubConnection.SendAsync("SendMessage", _roomName, _username, _message);
 
 		// Clear message input
