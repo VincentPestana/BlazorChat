@@ -11,12 +11,14 @@
 	<div class="container" id="pnlChat">
 		<div class="row">
 			<div class="col-sm">
-				<div class="input-group">
-					<input class="form-control" placeholder="Type your message here" @bind="_message" />
-					<div class="input-group-append">
-						<button class="btn btn-outline-dark" type="button" @onclick="SendMessage">Send</button>
+				<form>
+					<div class="input-group">
+						<input class="form-control" placeholder="Type your message here" @bind="_message" />
+						<div class="input-group-append">
+							<button class="btn btn-outline-dark" type="submit" @onsubmit="SendMessage">Send</button>
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 		<div class="row">
@@ -27,7 +29,7 @@
 						<li class="list-group-item @(_username == chat.Username ? "active" : "")">
 							<b>@chat.Username</b><br />
 							@chat.Text<br />
-							<h6>@chat.DateSent</h6>
+							<small class="text-muted">@chat.DateSent</small>
 						</li>
 					}
 				</ul>
