@@ -3,13 +3,13 @@
 @inject NavigationManager NavigationManager
 
 <br />
-<h3>Chat Lobby</h3>
+<h3>Welcome @_username!</h3>
 
 <div class="container">
 	<div class="row">
-		<div class="col-sm-4 offset-4">
+		<div class="col-sm-4 offset-4 input-group">
 			<h2>Username</h2>
-			<input @bind="_username" />
+			<input class="form-control" @bind="_username" @bind:event="oninput" />
 		</div>
 	</div>
 	<div class="row">
