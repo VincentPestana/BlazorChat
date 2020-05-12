@@ -7,23 +7,30 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-sm-4 offset-4 input-group">
-			<h2>Username</h2>
-			<input class="form-control" @bind="_username" @bind:event="oninput" />
+		<div class="col-sm-4 offset-4 border rounded">
+			<div class="form-group m-3">
+				<label class="h3" for="username">Username</label>
+				<input class="form-control" id="username" placeholder="Enter Username" @bind="_username" @bind:event="oninput" />
+			</div>
 		</div>
 	</div>
+
 	<div class="row">
-		<div class="col-sm">
-			<h3>Create new chat room</h3>
-			<input @bind="_createName" />
-			<br />
-			<input type="button" value="Create Room" @onclick="CreateRoom" />
+		<div class="col-sm border rounded">
+			<div class="form-group m-3">
+				<h3>Create new chat room</h3>
+				<input @bind="_createName" />
+				<br />
+				<input type="button" value="Create Room" @onclick="CreateRoom" />
+			</div>
 		</div>
-		<div class="col-sm">
-			<h3>Join Room</h3>
-			<input @bind="_joinRoomName" />
-			<br />
-			<input type="button" value="Join Room" @onclick="JoinRoom" />
+		<div class="col-sm border rounded">
+			<div class="form-group m-3">
+				<h3>Join Room</h3>
+				<input @bind="_joinRoomName" />
+				<br />
+				<input type="button" value="Join Room" @onclick="JoinRoom" />
+			</div>
 		</div>
 	</div>
 </div>
